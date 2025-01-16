@@ -1,0 +1,7 @@
+app:
+  port: 8080
+database:
+  host: localhost
+  user: postgres
+  password: password
+  name: app_db
