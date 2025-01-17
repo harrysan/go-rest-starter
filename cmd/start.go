@@ -1,11 +1,12 @@
 package cmd
 
 import (
+	"log"
+	"net/http"
+
 	"finance-tracker/internal/data"
 	"finance-tracker/pkg/config"
 	"finance-tracker/routes"
-	"log"
-	"net/http"
 
 	"github.com/urfave/cli/v2"
 )
@@ -16,10 +17,11 @@ func Start() *cli.Command {
 		Usage: "Start server",
 		Action: func(c *cli.Context) error {
 			// Load configuration
-			config.LoadConfigs()
+			cfg := config.LoadConfigs()
 
 			// Initialize database
-			db := data.InitDatabase()
+			dsn := "host=" + cfg.DatabaseConfig.Host + " user=" + cfg.DatabaseConfig.User + " password=" + cfg.DatabaseConfig.Password + " dbname=" + cfg.DatabaseConfig.Name + " port=" + cfg.DatabaseConfig.Port + " sslmode=disable"
+			db := data.InitDatabase(dsn)
 			// defer db.Close
 
 			// Setup routes

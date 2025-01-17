@@ -1,18 +1,24 @@
 package data
 
 import (
-	"finance-tracker/internal/auth/schema"
+	"fmt"
 	"log"
+
+	"finance-tracker/internal/auth/schema"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func InitDatabase() *gorm.DB {
-	dsn := "host=localhost user=postgres password=postgres dbname=finance-tracker port=5432 sslmode=disable"
+func InitDatabase(dsn string) *gorm.DB {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %s\n", err.Error())
+	}
+
+	err = RunMigrations(db)
+	if err != nil {
+		log.Fatalf("Failed to run migrations: %s\n", err.Error())
 	}
 
 	return db

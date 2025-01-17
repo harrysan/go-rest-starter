@@ -1,10 +1,11 @@
 package schema
 
 import (
-	"finance-tracker/pkg/errors"
 	"time"
 
-	"github.com/Aguztinus/web-natura-backend/pkg/crypto/hash"
+	"finance-tracker/pkg/crypto/hash"
+	"finance-tracker/pkg/errors"
+
 	"github.com/go-playground/validator/v10"
 )
 

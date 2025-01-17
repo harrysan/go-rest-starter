@@ -1,54 +1,59 @@
 package config
 
 import (
-	"log"
-	"os"
+	"fmt"
 
-	yaml "gopkg.in/yaml.v3"
+	"github.com/spf13/viper"
 )
 
-// Load Config
-var RootConfig AppConfig
-
 type AppConfig struct {
-	Host             string         `yaml:"host"`
-	Port             string         `yaml:"port"`
-	AppTimeoutConfig TimeoutConfig  `yaml:"timeout"`
-	DatabaseConfig   DatabaseConfig `yaml:"database"`
-	UserConfig       UserConfig     `yaml:"user"`
+	Host             string
+	Port             string
+	AppTimeoutConfig TimeoutConfig  `mapstructure:"AppTimeout"`
+	DatabaseConfig   DatabaseConfig `mapstructure:"AppDatabase"`
+	RootConfig       RootConfig     `mapstructure:"AppRoot"`
 }
 
 type TimeoutConfig struct {
-	Server int `yaml:"server"`
-	Read   int `yaml:"read"`
-	Write  int `yaml:"write"`
-	Idle   int `yaml:"idle"`
+	Server int
+	Read   int
+	Write  int
+	Idle   int
 }
 
 type DatabaseConfig struct {
-	Host     string `yaml:"host"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	Name     string `yaml:"name"`
+	Host     string
+	User     string
+	Password string
+	Name     string
+	Port     string
 }
 
-type UserConfig struct {
-	DefaultLoginPwd string `yaml:"defaultloginpwd"`
+type RootConfig struct {
+	Username string
+	Password string
 }
 
-// Load
-func init() {
-	LoadConfigs()
-}
+func LoadConfigs() AppConfig {
+	var cfg AppConfig
 
-func LoadConfigs() {
-	yamlData, err := os.ReadFile("../../configs/config.yaml")
+	viper.SetConfigName("config")
+	viper.SetConfigType("toml")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("fatal error config file: %w", err))
+	}
 
+	err = viper.Unmarshal(&cfg)
 	if err != nil {
-		log.Fatal("Error while reading app config file", err)
+		panic(fmt.Errorf("Environment can't be loaded: ", err))
 	}
 
-	if err := yaml.Unmarshal(yamlData, &RootConfig); err != nil {
-		panic(err)
-	}
+	fmt.Print("Host = ")
+	fmt.Println(viper.Get("App.Host"))
+	fmt.Print("Port = ")
+	fmt.Println(viper.Get("App.Port"))
+
+	return cfg
 }
