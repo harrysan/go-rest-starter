@@ -1,13 +1,17 @@
 package dal
 
 import (
-	"finance-tracker/internal/auth/schema"
+	"finance-tracker/internal/mods/auth/schema"
 
 	"gorm.io/gorm"
 )
 
 type User struct {
 	DB *gorm.DB
+}
+
+func NewUserDal(db *gorm.DB) *User {
+	return &User{DB: db}
 }
 
 func (a *User) Query() (*schema.UserQueryResult, error) {

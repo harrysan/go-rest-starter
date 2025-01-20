@@ -1,8 +1,8 @@
 package api
 
 import (
-	"finance-tracker/internal/auth/biz"
-	"finance-tracker/internal/auth/schema"
+	"finance-tracker/internal/mods/auth/biz"
+	"finance-tracker/internal/mods/auth/schema"
 	"finance-tracker/pkg/util"
 	"strconv"
 
@@ -11,6 +11,10 @@ import (
 
 type User struct {
 	UserBIZ biz.User
+}
+
+func NewUserApi(userBIZ *biz.User) *User {
+	return &User{UserBIZ: *userBIZ}
 }
 
 // @Tags UserAPI

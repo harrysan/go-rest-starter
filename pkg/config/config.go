@@ -44,8 +44,10 @@ func LoadConfigs() App {
 	viper.SetConfigName("config")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath(".")
+
+	// Handle errors reading the config file
 	err := viper.ReadInConfig()
-	if err != nil { // Handle errors reading the config file
+	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
@@ -53,11 +55,6 @@ func LoadConfigs() App {
 	if err != nil {
 		panic(fmt.Errorf("Environment can't be loaded: ", err))
 	}
-
-	// fmt.Print("Host = ")
-	// fmt.Println(viper.Get("App.Host"))
-	// fmt.Print("Port = ")
-	// fmt.Println(viper.Get("App.Port"))
 
 	return cfg
 }

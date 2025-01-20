@@ -1,14 +1,18 @@
 package biz
 
 import (
-	"finance-tracker/internal/auth/dal"
-	"finance-tracker/internal/auth/schema"
+	"finance-tracker/internal/mods/auth/dal"
+	"finance-tracker/internal/mods/auth/schema"
 	"finance-tracker/pkg/errors"
 	"time"
 )
 
 type User struct {
 	UserDAL *dal.User
+}
+
+func NewUserBiz(userDAL *dal.User) *User {
+	return &User{UserDAL: userDAL}
 }
 
 func (a *User) Query() (*schema.UserQueryResult, error) {
