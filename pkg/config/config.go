@@ -6,12 +6,16 @@ import (
 	"github.com/spf13/viper"
 )
 
-type AppConfig struct {
-	Host             string
-	Port             string
+type App struct {
+	AppConfig        AppConfig      `mapstructure:"AppConfig"`
 	AppTimeoutConfig TimeoutConfig  `mapstructure:"AppTimeout"`
 	DatabaseConfig   DatabaseConfig `mapstructure:"AppDatabase"`
 	RootConfig       RootConfig     `mapstructure:"AppRoot"`
+}
+
+type AppConfig struct {
+	Host string
+	Port string
 }
 
 type TimeoutConfig struct {
@@ -34,8 +38,8 @@ type RootConfig struct {
 	Password string
 }
 
-func LoadConfigs() AppConfig {
-	var cfg AppConfig
+func LoadConfigs() App {
+	var cfg App
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("toml")
@@ -50,10 +54,10 @@ func LoadConfigs() AppConfig {
 		panic(fmt.Errorf("Environment can't be loaded: ", err))
 	}
 
-	fmt.Print("Host = ")
-	fmt.Println(viper.Get("App.Host"))
-	fmt.Print("Port = ")
-	fmt.Println(viper.Get("App.Port"))
+	// fmt.Print("Host = ")
+	// fmt.Println(viper.Get("App.Host"))
+	// fmt.Print("Port = ")
+	// fmt.Println(viper.Get("App.Port"))
 
 	return cfg
 }

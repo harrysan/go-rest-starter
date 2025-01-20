@@ -3,6 +3,7 @@ package cmd
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"finance-tracker/internal/data"
 	"finance-tracker/pkg/config"
@@ -28,8 +29,16 @@ func Start() *cli.Command {
 			router := routes.SetupRoutes(db)
 
 			// Start server
-			log.Println("Starting server on port 8080...")
-			if err := http.ListenAndServe(":8080", router); err != nil {
+			s := &http.Server{
+				Addr:         cfg.AppConfig.Port,
+				Handler:      router,
+				ReadTimeout:  time.Duration(cfg.AppTimeoutConfig.Read * int(time.Second)),
+				WriteTimeout: time.Duration(cfg.AppTimeoutConfig.Write * int(time.Second)),
+				IdleTimeout:  time.Duration(cfg.AppTimeoutConfig.Idle * int(time.Second)),
+			}
+
+			log.Println("Starting server on port " + cfg.AppConfig.Port + "...")
+			if err := s.ListenAndServe(); err != nil {
 				log.Fatalf("Could not start server: %s\n", err.Error())
 			}
 

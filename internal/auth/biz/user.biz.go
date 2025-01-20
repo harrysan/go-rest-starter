@@ -3,7 +3,6 @@ package biz
 import (
 	"finance-tracker/internal/auth/dal"
 	"finance-tracker/internal/auth/schema"
-	"finance-tracker/pkg/config"
 	"finance-tracker/pkg/errors"
 	"time"
 )
@@ -39,7 +38,9 @@ func (a *User) Create(formItem *schema.UserForm) (*schema.User, error) {
 	}
 
 	if formItem.Password == "" {
-		formItem.Password = config.RootConfig.UserConfig.DefaultLoginPwd
+		//formItem.Password = config.RootConfig.Password
+		return nil, errors.BadRequest("", "Password can't be em")
+
 	}
 	user := &schema.User{
 		CreatedAt: time.Now(),

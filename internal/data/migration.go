@@ -1,7 +1,6 @@
 package data
 
 import (
-	"fmt"
 	"log"
 
 	"finance-tracker/internal/auth/schema"
