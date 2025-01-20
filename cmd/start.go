@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	_ "finance-tracker/docs"
 	"finance-tracker/internal/data"
 	"finance-tracker/internal/mods"
 	"finance-tracker/internal/mods/auth"
@@ -15,6 +16,8 @@ import (
 	"finance-tracker/pkg/util"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"github.com/urfave/cli/v2"
 )
 
@@ -36,6 +39,9 @@ func Start() *cli.Command {
 
 			// Initiate gin
 			e := gin.Default()
+			// Swagger endpoint
+			e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 			gAPI := e.Group(mods.ApiPrefix)
 			v1 := gAPI.Group("v1")
 

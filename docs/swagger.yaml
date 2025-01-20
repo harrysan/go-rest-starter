@@ -1,0 +1,264 @@
+basePath: /
+definitions:
+  errors.Error:
+    properties:
+      code:
+        type: integer
+      detail:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+    type: object
+  schema.User:
+    properties:
+      created_at:
+        description: Create time
+        type: string
+      email:
+        description: Email of user
+        type: string
+      id:
+        description: Unique ID
+        type: integer
+      name:
+        description: Name of user
+        type: string
+      phone:
+        description: Phone number of user
+        type: string
+      remark:
+        description: Remark of user
+        type: string
+      status:
+        description: Status of user (activated, freezed)
+        type: string
+      updated_at:
+        description: Update time
+        type: string
+      username:
+        description: Username for login
+        type: string
+    type: object
+  schema.UserForm:
+    properties:
+      email:
+        description: Email of user
+        maxLength: 128
+        type: string
+      name:
+        description: Name of user
+        maxLength: 64
+        type: string
+      password:
+        description: Password for login (md5 hash)
+        maxLength: 64
+        type: string
+      phone:
+        description: Phone number of user
+        maxLength: 32
+        type: string
+      remark:
+        description: Remark of user
+        maxLength: 1024
+        type: string
+      status:
+        description: Status of user (activated, freezed)
+        enum:
+        - activated
+        - freezed
+        type: string
+      username:
+        description: Username for login
+        maxLength: 64
+        type: string
+    required:
+    - name
+    - status
+    - username
+    type: object
+  util.ResponseResult:
+    properties:
+      data: {}
+      error:
+        $ref: '#/definitions/errors.Error'
+      success:
+        type: boolean
+      total:
+        type: integer
+    type: object
+host: localhost:8040
+info:
+  contact: {}
+  description: A finance tracker API service based on golang.
+  title: Finance Tracker API
+  version: "1.0"
+paths:
+  /api/v1/users:
+    get:
+      parameters:
+      - description: Username for login
+        in: query
+        name: username
+        type: string
+      - description: Name of user
+        in: query
+        name: name
+        type: string
+      - description: Status of user (activated, freezed)
+        in: query
+        name: status
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.User'
+                  type: array
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Query user list
+      tags:
+      - UserAPI
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Create user record
+      tags:
+      - UserAPI
+  /api/v1/users/{id}:
+    delete:
+      parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete user record by ID
+      tags:
+      - UserAPI
+    get:
+      parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.User'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Get user record by ID
+      tags:
+      - UserAPI
+    put:
+      parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Update user record by ID
+      tags:
+      - UserAPI
+swagger: "2.0"

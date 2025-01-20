@@ -14,6 +14,9 @@ start:
 build:
 	@go build main.go
 
+swagger:
+	@swag init --parseDependency --generalInfo ./main.go --output ./docs
+
 # go install github.com/google/wire/cmd/wire@latest
 wire:
 	@wire gen

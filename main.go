@@ -8,6 +8,11 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// @title           Finance Tracker API
+// @version         1.0
+// @description     A finance tracker API service based on golang.
+// @host            localhost:8040
+// @BasePath        /
 func main() {
 	app := cli.NewApp()
 	app.Name = "Finance Tracker"
