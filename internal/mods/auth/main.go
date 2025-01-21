@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"finance-tracker/internal/mods/auth/api"
-	"finance-tracker/internal/mods/auth/schema"
 	"fmt"
 
-	"github.com/gin-gonic/gin"
+	"finance-tracker/internal/mods/auth/api"
+	"finance-tracker/internal/mods/auth/schema"
+
 	"gorm.io/gorm"
 )
 
@@ -30,15 +30,15 @@ func (a *Auth) Init() error {
 	return nil
 }
 
-func (a *Auth) RegisterV1Routers(v1 *gin.RouterGroup) error {
-	user := v1.Group("users")
-	{
-		user.GET("", a.UserAPI.Query)
-		user.GET(":id", a.UserAPI.Get)
-		user.POST("", a.UserAPI.Create)
-		user.PUT(":id", a.UserAPI.Update)
-		user.DELETE(":id", a.UserAPI.Delete)
-	}
+// func (a *Auth) RegisterV1Routers(v1 *gin.RouterGroup) error {
+// 	user := v1.Group("users")
+// 	{
+// 		user.GET("", a.UserAPI.Query)
+// 		user.GET(":id", a.UserAPI.Get)
+// 		user.POST("", a.UserAPI.Create)
+// 		user.PUT(":id", a.UserAPI.Update)
+// 		user.DELETE(":id", a.UserAPI.Delete)
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

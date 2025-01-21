@@ -5,27 +5,16 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func InitDatabase(dsn string) *gorm.DB {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
-	})
+	// Initialize database
+	// dsn := "host=" + cfg.DatabaseConfig.Host + " user=" + cfg.DatabaseConfig.User + " password=" + cfg.DatabaseConfig.Password + " dbname=" + cfg.DatabaseConfig.Name + " port=" + cfg.DatabaseConfig.Port + " sslmode=disable"
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %s\n", err.Error())
 	}
 
-	// err = RunMigrations(db)
-	if err != nil {
-		log.Fatalf("Failed to run migrations: %s\n", err.Error())
-	}
-
 	return db
 }
-
-// func RunMigrations(db *gorm.DB) error {
-// 	return db.AutoMigrate(
-// 		&schema.User{},
-// 	)
-// }

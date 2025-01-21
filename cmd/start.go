@@ -1,23 +1,13 @@
 package cmd
 
 import (
-	"log"
-	"net/http"
-	"time"
-
 	_ "finance-tracker/docs"
-	"finance-tracker/internal/data"
-	"finance-tracker/internal/mods"
-	"finance-tracker/internal/mods/auth"
-	"finance-tracker/internal/mods/auth/api"
-	"finance-tracker/internal/mods/auth/biz"
-	"finance-tracker/internal/mods/auth/dal"
+	"finance-tracker/internal/server"
+	"finance-tracker/internal/wirex"
 	"finance-tracker/pkg/config"
-	"finance-tracker/pkg/util"
 
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"     // swagger embed files
-	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+	// swagger embed files
+	// gin-swagger middleware
 	"github.com/urfave/cli/v2"
 )
 
@@ -29,45 +19,15 @@ func Start() *cli.Command {
 			// Load configuration
 			cfg := config.LoadConfigs()
 
-			// Initialize database
-			dsn := "host=" + cfg.DatabaseConfig.Host + " user=" + cfg.DatabaseConfig.User + " password=" + cfg.DatabaseConfig.Password + " dbname=" + cfg.DatabaseConfig.Name + " port=" + cfg.DatabaseConfig.Port + " sslmode=disable"
-			db := data.InitDatabase(dsn)
-
-			userDal := dal.NewUserDal(db)
-			userBiz := biz.NewUserBiz(userDal)
-			userApi := api.NewUserApi(userBiz)
-
-			// Initiate gin
-			e := gin.Default()
-			// Swagger endpoint
-			e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-			gAPI := e.Group(mods.ApiPrefix)
-			v1 := gAPI.Group("v1")
-
-			// Test API
-			e.GET("/health", func(c *gin.Context) {
-				util.ResOK(c)
-			})
-
-			a := auth.Auth{
-				UserAPI: userApi,
-			}
-			a.RegisterV1Routers(v1)
-
-			// Start server
-			s := &http.Server{
-				Addr:         cfg.AppConfig.Port,
-				Handler:      e,
-				ReadTimeout:  time.Duration(cfg.AppTimeoutConfig.Read * int(time.Second)),
-				WriteTimeout: time.Duration(cfg.AppTimeoutConfig.Write * int(time.Second)),
-				IdleTimeout:  time.Duration(cfg.AppTimeoutConfig.Idle * int(time.Second)),
+			// Initialize dependencies
+			handlers, err := wirex.InitializeDependencies()
+			if err != nil {
+				return err
 			}
 
-			log.Println("Starting server on port " + cfg.AppConfig.Port + "...")
-			if err := s.ListenAndServe(); err != nil {
-				log.Fatalf("Could not start server: %s\n", err.Error())
-			}
+			// Create and start server
+			srv := server.NewServer(handlers, cfg)
+			server.StartServer(srv)
 
 			return nil
 		},
