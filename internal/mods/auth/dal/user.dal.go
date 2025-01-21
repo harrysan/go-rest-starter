@@ -56,15 +56,17 @@ func (a *User) ExistsByUsername(username string) (bool, error) {
 	var user schema.User
 	result := a.DB.First(&user, "username=?", username)
 
-	if result.Error != nil {
+	if result.Error.Error() == "record not found" {
+		return false, nil
+	} else {
 		return false, result.Error
 	}
 
-	if result.RowsAffected > 0 {
-		return true, nil
-	}
+	// if result.RowsAffected > 0 {
+	// 	return true, nil
+	// }
 
-	return false, nil
+	// return false, nil
 }
 
 func (a *User) Create(user *schema.User) error {

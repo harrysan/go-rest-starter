@@ -3,10 +3,10 @@ Host = "127.0.0.1"
 Port = ":8040"
 
 [AppTimeout]
-Server = 30
-Read = 15
-Write = 10
-Idle = 5
+Server = 60
+Read = 60
+Write = 60
+Idle = 10
 
 [AppDatabase]
 Host = "localhost"
