@@ -36,40 +36,19 @@ make swagger
 
 ## Folder Structure
 
-`project-root/
-├── cmd/
-│   └── main.go               # Entry point for starting the application.
-│                             # Responsible for loading configuration, dependencies, and starting the server.
-├── configs/
-│   └── config.toml           # Application configuration file.
-├── docs/
-│   ├── docs.go               # Swagger documentation generation file.
-│   ├── swagger.json          # Generated Swagger JSON file.
-│   └── swagger.yaml          # Generated Swagger YAML file.
-├── internal/
-│   ├── data/                 # Database migration logic and management.
-│   │   ├── migrate.go        # Handles migrations (currently for PostgreSQL, future support dynamic).
-│   ├── mods/                 # Core project layers.
-│   │   ├── dal/              # Data Access Layer.
-│   │   ├── biz/              # Business Logic Layer.
-│   │   ├── api/              # API layer with handlers and routes.
-│   │   ├── schema/           # Data schemas (structs, validation).
-│   │   └── mods.go           # Wire setup and route initialization.
-│   ├── server/               # Server initialization logic.
-│   │   └── server.go         # Creates and starts a new server instance.
-│   ├── wirex/                # Google Wire setup for dependency injection.
-│   │   └── wire_gen.go       # Generated dependency injection code.
-├── pkg/                      # Reusable global utilities and helpers.
-│   ├── errors/               # Custom error handling utilities.
-│   ├── utils/                # General utility functions.
-│   └── other_helpers.go      # Other global helper functions.
-├── scripts/                  # Scripts for setting up and running the project in new environments.
-│   └── setup_env.sh          # Environment setup script (future implementation).
-├── tests/                    # Testing code for the project.
-│   ├── unit/                 # Unit tests.
-│   ├── integration/          # Integration tests.
-│   └── test_helpers.go       # Helper functions for tests.
-├── Makefile                  # Build, run, and utility commands via `
+`.
+└── finance-tracker/
+    ├── cmd/       # Entry point for starting the application.
+    ├── docs/      # Swagger documentation generation file.
+    ├── internal/
+    │   ├── data/    # Handles migrations (currently for PostgreSQL, future support dynamic).
+    │   ├── mods/    # Core project layers.
+    │   ├── server/  # Creates and starts a new server instance.
+    │   └── wirex/   # Generated dependency injection code.
+    ├── pkg/       # Reusable global utilities and helpers.
+    ├── scripts/   # Environment setup script (future implementation).
+    ├── tests/     # Testing code for the project.
+    └── Makefile   # Build, run, and utility commands via `
 
 
 ### Description of Each Folder/File
