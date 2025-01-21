@@ -18,7 +18,7 @@ make start
 make build
 ```
 
-## Generate wire inject files (soon))
+## Generate wire inject files (soon)
 
 [](https://github.com/harrrysan/finance-tracker#generate-wire-inject-files)
 
