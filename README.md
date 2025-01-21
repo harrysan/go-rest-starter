@@ -36,7 +36,8 @@ make swagger
 
 ## Folder Structure
 
-`.
+```
+.
 └── finance-tracker/
     ├── cmd/       # Entry point for starting the application.
     ├── docs/      # Swagger documentation generation file.
@@ -48,7 +49,8 @@ make swagger
     ├── pkg/       # Reusable global utilities and helpers.
     ├── scripts/   # Environment setup script (future implementation).
     ├── tests/     # Testing code for the project.
-    └── Makefile   # Build, run, and utility commands via `
+    └── Makefile   # Build, run, and utility commands via make.
+```
 
 
 ### Description of Each Folder/File
@@ -57,17 +59,15 @@ make swagger
 2. **`configs/`** : Holds the configuration files for the application, such as `config.toml`.
 3. **`docs/`** : Stores the generated Swagger documentation files, including JSON, YAML, and the generator logic.
 4. **`internal/`** : Encapsulates the application's internal logic.
-
-* **`data/`** : Manages database migrations. Currently supports PostgreSQL, with future dynamic database support planned.
-* **`mods/`** : Contains the core layers: `dal` (Data Access), `biz` (Business Logic), `api` (API routes and handlers), and `schema` (data models and validation).
-* **`server/`** : Responsible for creating and starting the server.
-* **`wirex/`** : Handles Google Wire-based dependency injection.
-
-1. **`pkg/`** : A collection of reusable global utilities, such as error handling and utility functions.
-2. **`scripts/`** : Placeholder for scripts to set up the environment or other automation tasks.
-3. **`tests/`** : Contains all testing-related code, separated into unit and integration test directories.
-4. **`Makefile`** : Defines build and run commands using `make`.
-5. **`README.md`** : Provides a guide for developers working on the project.
+   `data/` : Manages database migrations. Currently supports PostgreSQL, with future dynamic database support planned.
+   `mods/` : Contains the core layers: `dal` (Data Access), `biz` (Business Logic), `api` (API routes and handlers), and `schema` (data models and validation).
+   `server/` : Responsible for creating and starting the server.
+   `wirex/` : Handles Google Wire-based dependency injection.
+5. **`pkg/`** : A collection of reusable global utilities, such as error handling and utility functions.
+6. **`scripts/`** : Placeholder for scripts to set up the environment or other automation tasks.
+7. **`tests/`** : Contains all testing-related code, separated into unit and integration test directories.
+8. **`Makefile`** : Defines build and run commands using `make`.
+9. **`README.md`** : Provides a guide for developers working on the project.
 
 
 Happy Coding :D
