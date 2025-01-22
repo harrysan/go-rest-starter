@@ -19,6 +19,6 @@ Port = "5432"
 Username = "admin"
 Password = "admin"
 
-[JWT]
+[JWTConfig]
 JWTSecretKey = "veryverysecretkey"
 TokenExpiry = 60  #Expiry in minutes

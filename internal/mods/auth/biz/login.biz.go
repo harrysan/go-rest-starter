@@ -6,6 +6,7 @@ import (
 	"finance-tracker/pkg/config"
 	"finance-tracker/pkg/crypto/hash"
 	"finance-tracker/pkg/errors"
+	"finance-tracker/pkg/jwt"
 )
 
 type Login struct {
@@ -18,23 +19,31 @@ func (a *Login) Login(formItem *schema.LoginForm) (*schema.LoginToken, error) {
 	if err != nil {
 		return nil, err
 	} else if user == nil {
-		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "%s", "Incorrect username "+formItem.Username+" or password")
+		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "%s", "Invalid credentials")
 	} else if user.Status != schema.UserStatusActivated {
 		return nil, errors.BadRequest("", "User status is not activated, please contact the administrator")
 	}
 
 	// check password
 	if err := hash.CompareHashAndPassword(user.Password, formItem.Password); err != nil {
-		// if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(formItem.Password)); err != nil {
-		// fmt.Println(bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(formItem.Password)))
-		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "%s", "2 Incorrect username or password, Password "+user.Password+" Form password "+formItem.Password)
+		return nil, errors.BadRequest(config.ErrInvalidUsernameOrPassword, "%s", "2 Invalid credentials")
 	}
 
-	token := &schema.LoginToken{
-		AccessToken: "mock-secret-token",
+	// Load configuration
+	cfg := config.LoadConfigs()
+
+	// Generate JWT token
+	jwtManager := jwt.NewJWTManager(cfg.JWTConfig.JWTSecretKey, cfg.JWTConfig.TokenExpiry)
+	token, err := jwtManager.GenerateToken(uint(user.ID), user.Email)
+	if err != nil {
+		return nil, errors.InternalServerError("", "Failed to generate token")
+	}
+
+	loginToken := &schema.LoginToken{
+		AccessToken: token,
 		TokenType:   "Bearer",
-		ExpiresAt:   1000,
+		ExpiresAt:   int64(cfg.JWTConfig.TokenExpiry),
 	}
 
-	return token, nil
+	return loginToken, nil
 }

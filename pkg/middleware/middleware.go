@@ -4,33 +4,38 @@ import (
 	"net/http"
 	"strings"
 
+	"finance-tracker/pkg/jwt"
+
 	"github.com/gin-gonic/gin"
 )
 
-// AuthMiddleware validates Bearer token.
-// @securityDefinitions.apikey BearerAuth
+// AuthMiddleware godoc
+// @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
 func AuthMiddleware(secretKey string) gin.HandlerFunc {
+	jwtManager := jwt.NewJWTManager(secretKey, 0) // Expiry hanya untuk generate token
 	return func(c *gin.Context) {
-		// Ambil token dari header Authorization
 		authHeader := c.GetHeader("Authorization")
 		if !strings.HasPrefix(authHeader, "Bearer ") {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token format"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized. Invalid token format."})
 			c.Abort()
 			return
 		}
 
 		token := strings.TrimPrefix(authHeader, "Bearer ")
 
-		// Validasi token (contoh sederhana, gunakan JWT untuk implementasi nyata)
-		if token != secretKey {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+		claims, err := jwtManager.VerifyToken(token)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized. Invalid or expired token"})
 			c.Abort()
 			return
 		}
 
-		// Lolos validasi, lanjutkan request
+		// Simpan informasi user di context
+		c.Set("userID", claims.UserID)
+		c.Set("email", claims.Email)
+
 		c.Next()
 	}
 }
