@@ -29,16 +29,3 @@ func (a *Auth) Init() error {
 
 	return nil
 }
-
-// func (a *Auth) RegisterV1Routers(v1 *gin.RouterGroup) error {
-// 	user := v1.Group("users")
-// 	{
-// 		user.GET("", a.UserAPI.Query)
-// 		user.GET(":id", a.UserAPI.Get)
-// 		user.POST("", a.UserAPI.Create)
-// 		user.PUT(":id", a.UserAPI.Update)
-// 		user.DELETE(":id", a.UserAPI.Delete)
-// 	}
-
-// 	return nil
-// }

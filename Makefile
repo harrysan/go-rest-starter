@@ -19,7 +19,7 @@ swagger:
 
 # go install github.com/google/wire/cmd/wire@latest
 wire:
-	@wire gen
+	@wire gen ./internal/wirex
 
 clean:
 	rm -rf data

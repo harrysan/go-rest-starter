@@ -14,7 +14,8 @@ import (
 )
 
 type Handlers struct {
-	UserApi *api.User
+	UserApi  *api.User
+	LoginApi *api.Login
 }
 
 // ProvideConfig menyediakan konfigurasi aplikasi.

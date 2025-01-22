@@ -11,6 +11,7 @@ type App struct {
 	AppTimeoutConfig TimeoutConfig  `mapstructure:"AppTimeout"`
 	DatabaseConfig   DatabaseConfig `mapstructure:"AppDatabase"`
 	RootConfig       RootConfig     `mapstructure:"AppRoot"`
+	JWTConfig        JWTConfig      `mapstructure:"JWTConfig"`
 }
 
 type AppConfig struct {
@@ -38,6 +39,11 @@ type RootConfig struct {
 	Password string
 }
 
+type JWTConfig struct {
+	JWTSecretKey string
+	TokenExpiry  int // Expiry in minutes
+}
+
 func LoadConfigs() App {
 	var cfg App
 
@@ -53,7 +59,7 @@ func LoadConfigs() App {
 
 	err = viper.Unmarshal(&cfg)
 	if err != nil {
-		panic(fmt.Errorf("Environment can't be loaded: ", err))
+		panic(fmt.Errorf("environment can't be loaded: %w", err))
 	}
 
 	return cfg

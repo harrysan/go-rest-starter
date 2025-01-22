@@ -9,6 +9,11 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+const (
+	UserStatusActivated = "activated"
+	UserStatusFreezed   = "freezed"
+)
+
 // User management for RBAC
 type User struct {
 	ID        int       `json:"id" gorm:"size:20;primarykey;"` // Unique ID

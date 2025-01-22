@@ -18,3 +18,7 @@ Port = "5432"
 [AppRoot]
 Username = "admin"
 Password = "admin"
+
+[JWT]
+JWTSecretKey = "veryverysecretkey"
+TokenExpiry = 60  #Expiry in minutes

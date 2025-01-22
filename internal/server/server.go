@@ -6,7 +6,7 @@ import (
 	"time"
 
 	_ "finance-tracker/docs"
-	"finance-tracker/internal/mods"
+	"finance-tracker/internal/routes"
 	"finance-tracker/internal/wirex"
 	"finance-tracker/pkg/config"
 
@@ -21,9 +21,8 @@ func NewServer(handlers *wirex.Handlers, cfg config.App) *http.Server {
 	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// Setup routes
-	mods := mods.Mods{}
-	mods.RegisterRouters(r, handlers)
+	routes := routes.Routes{}
+	routes.RegisterRouters(r, handlers)
 
 	// Configure server
 	server := &http.Server{

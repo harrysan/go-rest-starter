@@ -11,6 +11,30 @@ definitions:
       status:
         type: string
     type: object
+  schema.LoginForm:
+    properties:
+      password:
+        description: Login password (md5 hash)
+        type: string
+      username:
+        description: Login name
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  schema.LoginToken:
+    properties:
+      access_token:
+        description: Access token (JWT)
+        type: string
+      expires_at:
+        description: 'Expired time (Unit: second)'
+        type: integer
+      token_type:
+        description: 'Token type (Usage: Authorization=${token_type} ${access_token})'
+        type: string
+    type: object
   schema.User:
     properties:
       created_at:
@@ -95,6 +119,52 @@ info:
   title: Finance Tracker API
   version: "1.0"
 paths:
+  /api/v1/login:
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schema.LoginForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.ResponseResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.LoginToken'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      summary: Login system with username and password
+      tags:
+      - LoginAPI
+  /api/v1/logout:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Logout system
+      tags:
+      - LoginAPI
   /api/v1/users:
     get:
       parameters:

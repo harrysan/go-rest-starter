@@ -12,12 +12,12 @@ func (a *LoginForm) Trim() *LoginForm {
 	return a
 }
 
-type LoginBody struct {
-	Data struct {
-		Nik  string `json:"nik"`
-		Pass string `json:"pass"`
-	} `json:"Data"`
-}
+// type LoginBody struct {
+// 	Data struct {
+// 		Username  string `json:"username"`
+// 		Password string `json:"password"`
+// 	} `json:"Data"`
+// }
 
 type LoginResponse struct {
 	Result  string `json:"Result"`

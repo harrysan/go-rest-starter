@@ -29,8 +29,16 @@ func (a *User) Query() (*schema.UserQueryResult, error) {
 
 func (a *User) Get(id int) (*schema.User, error) {
 	item := new(schema.User)
-
 	if err := a.DB.First(&item, id).Error; err != nil {
+		return nil, err
+	}
+
+	return item, nil
+}
+
+func (a *User) GetByUsername(username string) (*schema.User, error) {
+	item := new(schema.User)
+	if err := a.DB.First(&item, "username=?", username).Error; err != nil {
 		return nil, err
 	}
 

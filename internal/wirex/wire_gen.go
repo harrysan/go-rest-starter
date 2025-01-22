@@ -29,8 +29,16 @@ func InitializeDependencies() (*Handlers, error) {
 	apiUser := &api.User{
 		UserBIZ: bizUser,
 	}
+	login := &biz.Login{
+		UserDAL: user,
+		UserBIZ: bizUser,
+	}
+	apiLogin := &api.Login{
+		LoginBIZ: login,
+	}
 	handlers := &Handlers{
-		UserApi: apiUser,
+		UserApi:  apiUser,
+		LoginApi: apiLogin,
 	}
 	return handlers, nil
 }
@@ -38,7 +46,8 @@ func InitializeDependencies() (*Handlers, error) {
 // wire.go:
 
 type Handlers struct {
-	UserApi *api.User
+	UserApi  *api.User
+	LoginApi *api.Login
 }
 
 // ProvideConfig menyediakan konfigurasi aplikasi.
