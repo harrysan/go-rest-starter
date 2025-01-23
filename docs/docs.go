@@ -369,6 +369,56 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/users/{id}/reset-pwd": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "LoginAPI"
+                ],
+                "summary": "Change current user password",
+                "parameters": [
+                    {
+                        "description": "Request body",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateLoginPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/util.ResponseResult"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -419,6 +469,23 @@ const docTemplate = `{
                 },
                 "token_type": {
                     "description": "Token type (Usage: Authorization=${token_type} ${access_token})",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.UpdateLoginPassword": {
+            "type": "object",
+            "required": [
+                "new_password",
+                "old_password"
+            ],
+            "properties": {
+                "new_password": {
+                    "description": "New password (md5 hash)",
+                    "type": "string"
+                },
+                "old_password": {
+                    "description": "Old password (md5 hash)",
                     "type": "string"
                 }
             }

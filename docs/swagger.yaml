@@ -35,6 +35,18 @@ definitions:
         description: 'Token type (Usage: Authorization=${token_type} ${access_token})'
         type: string
     type: object
+  schema.UpdateLoginPassword:
+    properties:
+      new_password:
+        description: New password (md5 hash)
+        type: string
+      old_password:
+        description: Old password (md5 hash)
+        type: string
+    required:
+    - new_password
+    - old_password
+    type: object
   schema.User:
     properties:
       created_at:
@@ -331,4 +343,35 @@ paths:
       summary: Update user record by ID
       tags:
       - UserAPI
+  /api/v1/users/{id}/reset-pwd:
+    put:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateLoginPassword'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/util.ResponseResult'
+      security:
+      - ApiKeyAuth: []
+      summary: Change current user password
+      tags:
+      - LoginAPI
 swagger: "2.0"

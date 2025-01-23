@@ -2,6 +2,7 @@ package dal
 
 import (
 	"finance-tracker/internal/mods/auth/schema"
+	"finance-tracker/pkg/errors"
 
 	"gorm.io/gorm"
 )
@@ -94,4 +95,9 @@ func (a *User) Delete(id int) error {
 	}
 
 	return nil
+}
+
+func (a *User) UpdatePasswordByID(id int, password string) error {
+	result := a.DB.Where("id=?", id).Select("password").Updates(schema.User{Password: password})
+	return errors.WithStack(result.Error)
 }

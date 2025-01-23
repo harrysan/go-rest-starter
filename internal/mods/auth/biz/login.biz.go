@@ -83,3 +83,26 @@ func (a *Login) Logout(tokenString string) error {
 
 	return rds.BlacklistToken(a.RedisClient, tokenString, expirationTime)
 }
+
+func (a *Login) UpdatePassword(id int, updateItem *schema.UpdateLoginPassword) error {
+	user, err := a.UserDAL.Get(id)
+
+	if err != nil {
+		return err
+	} else if user == nil {
+		return errors.NotFound("", "User not found")
+	}
+
+	// check old password
+	if err := hash.CompareHashAndPassword(user.Password, updateItem.OldPassword); err != nil {
+		return errors.BadRequest("", "Incorrect old password")
+	}
+
+	// update password
+	newPassword, err := hash.GeneratePassword(updateItem.NewPassword)
+	if err != nil {
+		return err
+	}
+
+	return a.UserDAL.UpdatePasswordByID(user.ID, newPassword)
+}

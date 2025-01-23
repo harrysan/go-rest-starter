@@ -5,6 +5,7 @@ import (
 	"finance-tracker/internal/mods/auth/biz"
 	"finance-tracker/internal/mods/auth/schema"
 	"finance-tracker/pkg/util"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -56,6 +57,31 @@ func (a *Login) Logout(c *gin.Context) {
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 
 	err := a.LoginBIZ.Logout(token)
+	if err != nil {
+		util.ResError(c, err)
+		return
+	}
+	util.ResOK(c)
+}
+
+// @Tags LoginAPI
+// @Security ApiKeyAuth
+// @Summary Change current user password
+// @Param body body schema.UpdateLoginPassword true "Request body"
+// @Success 200 {object} util.ResponseResult
+// @Failure 400 {object} util.ResponseResult
+// @Failure 401 {object} util.ResponseResult
+// @Failure 500 {object} util.ResponseResult
+// @Router /api/v1/users/{id}/reset-pwd [put]
+func (a *Login) UpdatePassword(c *gin.Context) {
+	item := new(schema.UpdateLoginPassword)
+	if err := util.ParseJSON(c, item); err != nil {
+		util.ResError(c, err)
+		return
+	}
+
+	id, _ := strconv.Atoi(c.Param("id"))
+	err := a.LoginBIZ.UpdatePassword(id, item)
 	if err != nil {
 		util.ResError(c, err)
 		return
