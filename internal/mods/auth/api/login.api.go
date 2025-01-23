@@ -1,9 +1,11 @@
 package api
 
 import (
+	"errors"
 	"finance-tracker/internal/mods/auth/biz"
 	"finance-tracker/internal/mods/auth/schema"
 	"finance-tracker/pkg/util"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +15,7 @@ type Login struct {
 }
 
 func NewLoginApi(loginBIZ *biz.Login) *Login {
-	return &Login{LoginBIZ: *&loginBIZ}
+	return &Login{LoginBIZ: loginBIZ}
 }
 
 // @Tags LoginAPI
@@ -45,11 +47,18 @@ func (a *Login) Login(c *gin.Context) {
 // @Failure 500 {object} util.ResponseResult
 // @Router /api/v1/logout [post]
 func (a *Login) Logout(c *gin.Context) {
-	// ctx := c.Request.Context()
-	// err := a.LoginBIZ.Logout(ctx)
-	// if err != nil {
-	// 	util.ResError(c, err)
-	// 	return
-	// }
+	authHeader := c.GetHeader("Authorization")
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		util.ResError(c, errors.New("invalid token format"))
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	err := a.LoginBIZ.Logout(token)
+	if err != nil {
+		util.ResError(c, err)
+		return
+	}
 	util.ResOK(c)
 }

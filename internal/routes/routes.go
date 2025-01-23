@@ -43,6 +43,8 @@ func (a *Routes) RegisterRouters(e *gin.Engine, redisClient *redis.Client, handl
 
 	// Using JWT to access
 	gAPI.Use(middleware.AuthMiddleware(redisClient, cfg.JWTConfig.JWTSecretKey)) // Ganti dengan secret JWT nyata
+	gAPI.POST("/logout", handlers.LoginApi.Logout)
+
 	user := gAPI.Group("users")
 	{
 		user.GET("", handlers.UserApi.Query)
@@ -50,7 +52,6 @@ func (a *Routes) RegisterRouters(e *gin.Engine, redisClient *redis.Client, handl
 		user.POST("", handlers.UserApi.Create)
 		user.PUT(":id", handlers.UserApi.Update)
 		user.DELETE(":id", handlers.UserApi.Delete)
-		user.POST("/logout", handlers.LoginApi.Logout)
 	}
 
 	return nil

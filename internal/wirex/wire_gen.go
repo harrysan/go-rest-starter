@@ -12,6 +12,8 @@ import (
 	"finance-tracker/internal/mods/auth/biz"
 	"finance-tracker/internal/mods/auth/dal"
 	"finance-tracker/pkg/config"
+	redis2 "finance-tracker/pkg/redis"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
@@ -29,9 +31,11 @@ func InitializeDependencies() (*Handlers, error) {
 	apiUser := &api.User{
 		UserBIZ: bizUser,
 	}
+	client := ProvideRedis(app)
 	login := &biz.Login{
-		UserDAL: user,
-		UserBIZ: bizUser,
+		UserDAL:     user,
+		UserBIZ:     bizUser,
+		RedisClient: client,
 	}
 	apiLogin := &api.Login{
 		LoginBIZ: login,
@@ -65,4 +69,8 @@ func ProvideDatabase(cfg config.App) *gorm.DB {
 		" sslmode=disable"
 
 	return data.InitDatabase(dsn)
+}
+
+func ProvideRedis(cfg config.App) *redis.Client {
+	return redis2.NewRedisClient(cfg)
 }

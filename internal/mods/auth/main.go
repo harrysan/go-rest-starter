@@ -10,8 +10,9 @@ import (
 )
 
 type Auth struct {
-	DB      *gorm.DB
-	UserAPI *api.User
+	DB       *gorm.DB
+	UserAPI  *api.User
+	LoginAPI *api.Login
 }
 
 func (a *Auth) AutoMigrate() error {

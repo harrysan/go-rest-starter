@@ -44,7 +44,7 @@ func AuthMiddleware(redisClient *redis.Client, secretKey string) gin.HandlerFunc
 		}
 
 		if isBlacklisted {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is blacklisted"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token is invalid"})
 			c.Abort()
 			return
 		}

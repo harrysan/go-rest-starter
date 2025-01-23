@@ -7,11 +7,17 @@ import (
 	"finance-tracker/pkg/crypto/hash"
 	"finance-tracker/pkg/errors"
 	"finance-tracker/pkg/jwt"
+	rds "finance-tracker/pkg/redis"
+	"time"
+
+	gjwt "github.com/golang-jwt/jwt/v5"
+	"github.com/redis/go-redis/v9"
 )
 
 type Login struct {
-	UserDAL *dal.User
-	UserBIZ User
+	UserDAL     *dal.User
+	UserBIZ     User
+	RedisClient *redis.Client // Tambahkan Redis client
 }
 
 func (a *Login) Login(formItem *schema.LoginForm) (*schema.LoginToken, error) {
@@ -46,4 +52,34 @@ func (a *Login) Login(formItem *schema.LoginForm) (*schema.LoginToken, error) {
 	}
 
 	return loginToken, nil
+}
+
+func (a *Login) Logout(tokenString string) error {
+	cfg := config.LoadConfigs()
+
+	// Parse the JWT token to extract the expiration time
+	token, err := gjwt.Parse(tokenString, func(token *gjwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*gjwt.SigningMethodHMAC); !ok {
+			return nil, errors.BadRequest("", "invalid signing method")
+		}
+		return []byte(cfg.JWTConfig.JWTSecretKey), nil
+	})
+	if err != nil || !token.Valid {
+		return errors.BadRequest("", "invalid token")
+	}
+
+	claims, ok := token.Claims.(gjwt.MapClaims)
+	if !ok || !token.Valid {
+		return errors.BadRequest("", "invalid token claims")
+	}
+
+	expiration, ok := claims["exp"].(float64)
+	if !ok {
+		return errors.BadRequest("", "missing exp field in token")
+	}
+
+	// Calculate the remaining expiration time
+	expirationTime := time.Until(time.Unix(int64(expiration), 0))
+
+	return rds.BlacklistToken(a.RedisClient, tokenString, expirationTime)
 }
