@@ -22,3 +22,9 @@ Password = "admin"
 [JWTConfig]
 JWTSecretKey = "veryverysecretkey"
 TokenExpiry = 60  #Expiry in minutes
+
+[RedisConfig]
+Host = "127.0.0.1"
+Port = "6379"
+Password = ""
+DB = 0

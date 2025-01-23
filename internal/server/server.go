@@ -11,18 +11,19 @@ import (
 	"finance-tracker/pkg/config"
 
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
 	swaggerFiles "github.com/swaggo/files" // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func NewServer(handlers *wirex.Handlers, cfg config.App) *http.Server {
+func NewServer(handlers *wirex.Handlers, redisClient *redis.Client, cfg config.App) *http.Server {
 	r := gin.Default()
 
 	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	routes := routes.Routes{}
-	routes.RegisterRouters(r, handlers)
+	routes.RegisterRouters(r, redisClient, handlers)
 
 	// Configure server
 	server := &http.Server{

@@ -12,6 +12,7 @@ type App struct {
 	DatabaseConfig   DatabaseConfig `mapstructure:"AppDatabase"`
 	RootConfig       RootConfig     `mapstructure:"AppRoot"`
 	JWTConfig        JWTConfig      `mapstructure:"JWTConfig"`
+	RedisConfig      RedisConfig    `mapstructure:"RedisConfig"`
 }
 
 type AppConfig struct {
@@ -42,6 +43,13 @@ type RootConfig struct {
 type JWTConfig struct {
 	JWTSecretKey string
 	TokenExpiry  int // Expiry in minutes
+}
+
+type RedisConfig struct {
+	Host     string
+	Port     string
+	Password string
+	DB       int
 }
 
 func LoadConfigs() App {
