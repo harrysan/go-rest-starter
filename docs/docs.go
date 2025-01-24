@@ -383,6 +383,13 @@ const docTemplate = `{
                 "summary": "Change current user password",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "unique id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Request body",
                         "name": "body",
                         "in": "body",

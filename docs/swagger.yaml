@@ -346,6 +346,11 @@ paths:
   /api/v1/users/{id}/reset-pwd:
     put:
       parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
       - description: Request body
         in: body
         name: body

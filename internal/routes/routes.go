@@ -50,9 +50,9 @@ func (a *Routes) RegisterRouters(e *gin.Engine, redisClient *redis.Client, handl
 		user.GET("", handlers.UserApi.Query)
 		user.GET(":id", handlers.UserApi.Get)
 		user.POST("", handlers.UserApi.Create)
-		user.PUT(":id", handlers.UserApi.Update)
-		user.PUT(":id/reset-pwd", handlers.LoginApi.UpdatePassword)
-		user.DELETE(":id", handlers.UserApi.Delete)
+		user.PUT(":id", middleware.AuthorizationMiddleware("id"), handlers.UserApi.Update)
+		user.PUT(":id/reset-pwd", middleware.AuthorizationMiddleware("id"), handlers.LoginApi.UpdatePassword)
+		user.DELETE(":id", middleware.AuthorizationMiddleware("id"), handlers.UserApi.Delete)
 	}
 
 	return nil

@@ -38,12 +38,12 @@ func (a *User) Create(formItem *schema.UserForm) (*schema.User, error) {
 	if err != nil {
 		return nil, err
 	} else if existsUsername {
-		return nil, err
+		return nil, errors.BadRequest("", "Username already exists.")
 	}
 
 	if formItem.Password == "" {
 		//formItem.Password = config.RootConfig.Password
-		return nil, errors.BadRequest("", "Password can't be em")
+		return nil, errors.BadRequest("", "Password can't be empty.")
 
 	}
 	user := &schema.User{

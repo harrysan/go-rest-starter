@@ -47,25 +47,21 @@ func (a *User) GetByUsername(username string) (*schema.User, error) {
 }
 
 func (a *User) Exists(id int) (bool, error) {
-	var user schema.User
-	result := a.DB.First(&user, id)
-
-	if result.Error.Error() == "record not found" {
-		return false, nil
-	} else {
-		return false, result.Error
+	var count int64
+	err := a.DB.Model(&schema.User{}).Where("id = ?", id).Count(&count).Error
+	if err != nil {
+		return false, err
 	}
+	return count > 0, nil
 }
 
 func (a *User) ExistsByUsername(username string) (bool, error) {
-	var user schema.User
-	result := a.DB.First(&user, "username=?", username)
-
-	if result.Error.Error() == "record not found" {
-		return false, nil
-	} else {
-		return false, result.Error
+	var count int64
+	err := a.DB.Model(&schema.User{}).Where("username = ?", username).Count(&count).Error
+	if err != nil {
+		return false, err
 	}
+	return count > 0, nil
 }
 
 func (a *User) Create(user *schema.User) error {

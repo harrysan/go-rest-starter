@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"finance-tracker/pkg/jwt"
@@ -61,5 +62,36 @@ func AuthMiddleware(redisClient *redis.Client, secretKey string) gin.HandlerFunc
 		c.Set("email", claims.Email)
 
 		c.Next()
+	}
+}
+
+// AuthorizationMiddleware memastikan hanya user yang login dapat memproses request tertentu
+func AuthorizationMiddleware(paramKey string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Ambil user_id dari JWT (dari context)
+		userIDFromToken, exists := c.Get("userID")
+		if !exists {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			c.Abort()
+			return
+		}
+
+		// Ambil user_id dari parameter (dari URL, query, atau lainnya)
+		paramValue := c.Param(paramKey) // Param diambil dari URL
+		userIDFromParam, err := strconv.Atoi(paramValue)
+		if err != nil || userIDFromParam <= 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+			c.Abort()
+			return
+		}
+
+		// Cocokkan user_id dari token dan URL
+		if userIDFromToken != uint(userIDFromParam) {
+			c.JSON(http.StatusForbidden, gin.H{"error": "You are not authorized to access this resource"})
+			c.Abort()
+			return
+		}
+
+		c.Next() // Lanjutkan ke handler berikutnya jika validasi berhasil
 	}
 }

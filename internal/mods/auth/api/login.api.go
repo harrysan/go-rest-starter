@@ -67,6 +67,7 @@ func (a *Login) Logout(c *gin.Context) {
 // @Tags LoginAPI
 // @Security ApiKeyAuth
 // @Summary Change current user password
+// @Param id path string true "unique id"
 // @Param body body schema.UpdateLoginPassword true "Request body"
 // @Success 200 {object} util.ResponseResult
 // @Failure 400 {object} util.ResponseResult
@@ -74,13 +75,14 @@ func (a *Login) Logout(c *gin.Context) {
 // @Failure 500 {object} util.ResponseResult
 // @Router /api/v1/users/{id}/reset-pwd [put]
 func (a *Login) UpdatePassword(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+
 	item := new(schema.UpdateLoginPassword)
 	if err := util.ParseJSON(c, item); err != nil {
 		util.ResError(c, err)
 		return
 	}
 
-	id, _ := strconv.Atoi(c.Param("id"))
 	err := a.LoginBIZ.UpdatePassword(id, item)
 	if err != nil {
 		util.ResError(c, err)
