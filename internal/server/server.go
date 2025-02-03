@@ -22,8 +22,12 @@ func NewServer(handlers *wirex.Handlers, redisClient *redis.Client, cfg config.A
 	// Swagger endpoint
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	routes := routes.Routes{}
-	routes.RegisterRouters(r, redisClient, handlers)
+	routes := routes.Routes{
+		Engine:      r,
+		RedisClient: redisClient,
+		Handlers:    handlers,
+	}
+	routes.RegisterRouters()
 
 	// Configure server
 	server := &http.Server{

@@ -15,19 +15,23 @@ const (
 	ApiPrefix = "/api/v1/"
 )
 
-type Routes struct{}
+type Routes struct {
+	Engine      *gin.Engine
+	RedisClient *redis.Client
+	Handlers    *wirex.Handlers
+}
 
-func (a *Routes) RegisterRouters(e *gin.Engine, redisClient *redis.Client, handlers *wirex.Handlers) error {
+func (a *Routes) RegisterRouters() error {
 	// Load configuration
 	cfg := config.LoadConfigs()
 
-	gAPI := e.Group(ApiPrefix)
+	gAPI := a.Engine.Group(ApiPrefix)
 
 	gAPI.GET("/health", func(c *gin.Context) {
 		ctx := context.Background()
 
 		// Periksa Redis
-		if err := redisClient.Ping(ctx).Err(); err != nil {
+		if err := a.RedisClient.Ping(ctx).Err(); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"redis": "unavailable"})
 			return
 		}
@@ -39,20 +43,20 @@ func (a *Routes) RegisterRouters(e *gin.Engine, redisClient *redis.Client, handl
 	})
 
 	// Login
-	gAPI.POST("/login", handlers.LoginApi.Login)
+	gAPI.POST("/login", a.Handlers.LoginApi.Login)
 
 	// Using JWT to access
-	gAPI.Use(middleware.AuthMiddleware(redisClient, cfg.JWTConfig.JWTSecretKey))
-	gAPI.POST("/logout", handlers.LoginApi.Logout)
+	gAPI.Use(middleware.AuthMiddleware(a.RedisClient, cfg.JWTConfig.JWTSecretKey))
+	gAPI.POST("/logout", a.Handlers.LoginApi.Logout)
 
 	user := gAPI.Group("users")
 	{
-		user.GET("", handlers.UserApi.Query)
-		user.GET(":id", handlers.UserApi.Get)
-		user.POST("", handlers.UserApi.Create)
-		user.PUT(":id", middleware.AuthorizationMiddleware("id"), handlers.UserApi.Update)
-		user.PUT(":id/reset-pwd", middleware.AuthorizationMiddleware("id"), handlers.LoginApi.UpdatePassword)
-		user.DELETE(":id", middleware.AuthorizationMiddleware("id"), handlers.UserApi.Delete)
+		user.GET("", a.Handlers.UserApi.Query)
+		user.GET(":id", a.Handlers.UserApi.Get)
+		user.POST("", a.Handlers.UserApi.Create)
+		user.PUT(":id", middleware.AuthorizationMiddleware("id"), a.Handlers.UserApi.Update)
+		user.PUT(":id/reset-pwd", middleware.AuthorizationMiddleware("id"), a.Handlers.LoginApi.UpdatePassword)
+		user.DELETE(":id", middleware.AuthorizationMiddleware("id"), a.Handlers.UserApi.Delete)
 	}
 
 	return nil
