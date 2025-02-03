@@ -49,5 +49,6 @@ func InitializeDependencies() (*Handlers, error) {
 		mods.Set,
 		wire.Struct(new(Handlers), "*"),
 	) // end
+
 	return nil, nil
 }

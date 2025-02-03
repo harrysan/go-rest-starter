@@ -20,6 +20,7 @@ func main() {
 	app.Usage = "A finance tracker API service based on golang."
 	app.Commands = []*cli.Command{
 		cmd.Start(),
+		cmd.SeedData(),
 	}
 	err := app.Run(os.Args)
 	if err != nil {

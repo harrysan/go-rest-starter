@@ -23,3 +23,6 @@ wire:
 
 clean:
 	rm -rf data
+
+seed:
+	@go run main.go seed

@@ -44,7 +44,6 @@ func (a *User) Create(formItem *schema.UserForm) (*schema.User, error) {
 	if formItem.Password == "" {
 		//formItem.Password = config.RootConfig.Password
 		return nil, errors.BadRequest("", "Password can't be empty.")
-
 	}
 	user := &schema.User{
 		CreatedAt: time.Now(),
