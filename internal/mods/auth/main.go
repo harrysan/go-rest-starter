@@ -1,10 +1,7 @@
 package auth
 
 import (
-	"fmt"
-
 	"finance-tracker/internal/mods/auth/api"
-	"finance-tracker/internal/mods/auth/schema"
 
 	"gorm.io/gorm"
 )
@@ -16,17 +13,19 @@ type Auth struct {
 }
 
 func (a *Auth) AutoMigrate() error {
-	fmt.Println("AutoMigrate")
+	// fmt.Println("AutoMigrate")
 
-	return a.DB.AutoMigrate(
-		new(schema.User),
-	)
+	// return a.DB.AutoMigrate(
+	// 	new(schema.User),
+	// )
+
+	return nil
 }
 
 func (a *Auth) Init() error {
-	if err := a.AutoMigrate(); err != nil {
-		return err
-	}
+	// if err := a.AutoMigrate(); err != nil {
+	// 	return err
+	// }
 
 	return nil
 }

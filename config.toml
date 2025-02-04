@@ -12,12 +12,12 @@ Idle = 10
 Host = "localhost"
 User = "postgres"
 Password = "postgres"
-Name = "financetrackerdb"
+Name = "goreststarterdb"
 Port = "5432"
 
 [AppRoot]
 Username = "admin"
-Password = "admin"
+Password = "password"
 
 [JWTConfig]
 JWTSecretKey = "veryverysecretkey"
