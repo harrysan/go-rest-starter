@@ -1,20 +1,24 @@
 package seeder
 
 import (
+	"time"
+
 	"finance-tracker/internal/mods/auth/schema"
+	"finance-tracker/pkg/config"
 	"finance-tracker/pkg/crypto/hash"
 	"finance-tracker/pkg/errors"
-	"time"
 
 	"gorm.io/gorm"
 )
 
 func SeedUsers(db *gorm.DB) error {
+	cfg := config.LoadConfigs()
+
 	users := []*schema.User{
 		{
-			Username:  "admin",
+			Username:  cfg.RootConfig.Username,
 			Name:      "Admin User",
-			Password:  "password",
+			Password:  cfg.RootConfig.Password,
 			Email:     "admin@example.com",
 			Status:    "activated",
 			CreatedAt: time.Now(),
