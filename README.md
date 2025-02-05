@@ -46,7 +46,7 @@ make seed
 
 ```
 .
-└── finance-tracker/
+└── go-rest-starter/
     ├── cmd/       # Entry point for starting the application.
     ├── docs/      # Swagger documentation generation file.
     ├── db/        # For migrating table.
