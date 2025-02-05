@@ -65,10 +65,9 @@ make seed
 ### Description of Each Folder
 
 1. **`cmd/`** : Contains the entry point of the application. The `main.go` file initializes the configuration, loads dependencies, and starts the server.
-2. **`configs/`** : Holds the configuration files for the application, such as `config.toml`.
-3. **`docs/`** : Stores the generated Swagger documentation files, including JSON, YAML, and the generator logic.
-4. **`db/`** : For migrating tables into database.
-5. **`internal/`** : Encapsulates the application's internal logic.
+2. **`docs/`** : Stores the generated Swagger documentation files, including JSON, YAML, and the generator logic.
+3. **`db/`** : For migrating tables into database.
+4. **`internal/`** : Encapsulates the application's internal logic.
 
 - `data/` : Manages database migrations. Currently supports PostgreSQL, with future dynamic database support planned
 - `mods/` : Contains the core layers: `dal` (Data Access), `biz` (Business Logic), `api` (API routes and handlers), and `schema` (data models and validation).
