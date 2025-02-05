@@ -1,30 +1,43 @@
-
 # Golang Rest API Starter
 
 > A rest API service based on golang.
 
 ## Quick Start
+
 [](https://github.com/harrrysan/go-rest-starter#quick-start)
+
 ```shell
 make start
 ```
+
 ## Build
+
 [](https://github.com/harrrysan/go-rest-starter#build)
+
 ```shell
 make build
 ```
+
 ## Generate wire inject files
+
 [](https://github.com/harrrysan/go-rest-starter#generate-wire-inject-files)
+
 ```shell
 make wire
 ```
+
 ## Generate swagger documents
+
 [](https://github.com/harrrysan/go-rest-starter#generate-swagger-documents)
+
 ```shell
 make swagger
 ```
+
 ## Seed Data
+
 [](https://github.com/harrrysan/go-rest-starter#seed-data)
+
 ```shell
 make seed
 ```
@@ -56,17 +69,17 @@ make seed
 3. **`docs/`** : Stores the generated Swagger documentation files, including JSON, YAML, and the generator logic.
 4. **`db/`** : For migrating tables into database.
 5. **`internal/`** : Encapsulates the application's internal logic.
-   `* data/` : Manages database migrations. Currently supports PostgreSQL, with future dynamic database support planned.
-   `* mods/` : Contains the core layers: `dal` (Data Access), `biz` (Business Logic), `api` (API routes and handlers), and `schema` (data models and validation).
-   `* server/` : Responsible for creating and starting the server.
-   `* routes/` : List All Routes in API.
-   `* wirex/` : Handles Google Wire-based dependency injection.
-6. **`pkg/`** : A collection of reusable global utilities, such as error handling and utility functions.
-7. **`seeder/`** : Seed Data for various purposes in database.
-8. **`tests/`** : Contains all testing-related code, separated into unit and integration test directories.
-9. **`Makefile`** : Defines build and run commands using `make`.
-10. **`README.md`** : Provides a guide for developers working on the project.
 
+- `data/` : Manages database migrations. Currently supports PostgreSQL, with future dynamic database support planned
+- `mods/` : Contains the core layers: `dal` (Data Access), `biz` (Business Logic), `api` (API routes and handlers), and `schema` (data models and validation).
+- `server/` : Responsible for creating and starting the server.
+- `routes/` : List All Routes in API.
+- `wirex/` : Handles Google Wire-based dependency injection.
 
+7. **`pkg/`** : A collection of reusable global utilities, such as error handling and utility functions.
+8. **`seeder/`** : Seed Data for various purposes in database.
+9. **`tests/`** : Contains all testing-related code, separated into unit and integration test directories.
+10. **`Makefile`** : Defines build and run commands using `make`.
+11. **`README.md`** : Provides a guide for developers working on the project.
 
 Happy Coding 🔥🚀
